@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gowtham Tools - Color Palette Extractor</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tools.css">
+</head>
+<body>
+
+    <!-- PERSISTENT SIDEBAR -->
+    <aside class="app-sidebar">
+        <a href="../index.html" class="brand-section">
+            <div class="brand-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="brand-name">Gowtham<span>Tools</span></div>
+        </a>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="../index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            </li>
+            
+            <li class="nav-title">Video Tools</li>
+            <li class="nav-item">
+                <a href="video-frame-extractor.html"><i class="fa-solid fa-scissors"></i> Frame Extractor</a>
+            </li>
+            <li class="nav-item">
+                <a href="screen-recorder.html"><i class="fa-solid fa-video"></i> Screen & Cam Recorder</a>
+            </li>
+
+            <li class="nav-title">Image Tools</li>
+            <li class="nav-item image-tool-item">
+                <a href="image-compressor.html"><i class="fa-solid fa-compress"></i> Image Compressor</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-resizer.html"><i class="fa-solid fa-crop-simple"></i> Resizer & Cropper</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-converter.html"><i class="fa-solid fa-shuffle"></i> Bulk Format Converter</a>
+            </li>
+            <li class="nav-item active image-tool-item">
+                <a href="color-extractor.html"><i class="fa-solid fa-eye-dropper"></i> Color Palette Extractor</a>
+            </li>
+        </ul>
+
+        <div class="nav-footer">
+            <div class="profile-card">
+                <div class="profile-avatar">GT</div>
+                <div class="profile-info">
+                    <h4>Gowtham Tools</h4>
+                    <p>Client-Side Engine</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <div class="app-container">
+        <!-- HEADER NAVBAR -->
+        <header class="app-header">
+            <div class="header-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search tools..." id="sidebarSearch" disabled>
+            </div>
+            <div class="header-actions">
+                <a href="../index.html" class="action-btn-circle" title="Home Dashboard"><i class="fa-solid fa-house"></i></a>
+                <div class="action-btn-circle" title="System Settings"><i class="fa-solid fa-sliders"></i></div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="app-content">
+            <!-- Back navigation and title -->
+            <a href="../index.html" class="back-nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+            
+            <div class="tool-header-info">
+                <span class="tool-category-badge" style="background: rgba(6, 182, 212, 0.1); color: var(--clr-secondary); border-color: rgba(6, 182, 212, 0.2);">Image Pipeline</span>
+                <h1 class="tool-title">Dominant Color Extractor</h1>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="dropzone-container image-dropzone" id="dropZone">
+                <i class="fa-solid fa-eye-dropper"></i>
+                <p>Drag & Drop your image here or <span>Browse Local Files</span></p>
+                <span>Extract Dominant Swatches or Pick Pixels Manually</span>
+                <input type="file" id="imageInput" class="dropzone-input" accept="image/*">
+            </div>
+
+            <!-- File Specifications and Status -->
+            <div class="status-bar" id="statusBar">
+                <div class="status-left image-status">
+                    <i class="fa-solid fa-file-image"></i>
+                    <span id="targetName">file_stream.jpg</span>
+                </div>
+                <div class="status-right" id="targetSpecs">0.00 KB</div>
+            </div>
+
+            <!-- Previews Block -->
+            <div class="preview-section" id="previewSection">
+                <!-- Dominant Palette Swatches Card -->
+                <div class="control-panel image-panel" style="margin-bottom: 25px;">
+                    <div class="panel-title"><i class="fa-solid fa-palette"></i> Extracted Dominant Palette</div>
+                    <div id="paletteContainer" style="display:flex; flex-wrap:wrap; gap:16px;">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+
+                <!-- Canvas Picking Viewport -->
+                <div class="compare-container">
+                    <!-- Eyedropper Workspace -->
+                    <div class="compare-card">
+                        <div class="compare-label">
+                            <span>Image Canvas Viewport</span>
+                            <span style="color:var(--txt-muted); font-size:0.75rem;"><i class="fa-solid fa-circle-info"></i> Click anywhere to pick pixel color</span>
+                        </div>
+                        <div class="compare-viewport" style="aspect-ratio: auto; min-height: 350px;">
+                            <canvas id="displayCanvas" style="max-width:100%; height:auto; cursor:crosshair; border-radius:4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Pixel Inspector -->
+                    <div class="compare-card">
+                        <div class="compare-label">
+                            <span>Eyedropper Color Inspector</span>
+                        </div>
+                        
+                        <div style="display:flex; flex-direction:column; gap:20px;">
+                            <div style="display:flex; align-items:center; gap:20px; background:var(--bg-base); padding: 20px; border-radius:10px; border:1px solid var(--border-subtle);">
+                                <div id="eyedropperStatus" style="width: 70px; height: 70px; border-radius: 50%; border:2px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.4);"></div>
+                                <div>
+                                    <h3 style="color:var(--txt-title); font-size:1.1rem; font-weight:700;">Pixel Spot Target</h3>
+                                    <p style="font-size:0.8rem; color:var(--txt-muted);">Selected canvas coordinates active</p>
+                                </div>
+                            </div>
+
+                            <div class="input-wrapper">
+                                <label>HEX Format Code</label>
+                                <div style="display:flex; gap:8px;">
+                                    <input type="text" id="hexOutput" readonly style="flex-grow:1;">
+                                    <button class="action-btn image-action" style="margin:0; padding:12px 18px;" onclick="navigator.clipboard.writeText(document.getElementById('hexOutput').value)"><i class="fa-solid fa-copy"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="input-wrapper">
+                                <label>RGB Format Code</label>
+                                <div style="display:flex; gap:8px;">
+                                    <input type="text" id="rgbOutput" readonly style="flex-grow:1;">
+                                    <button class="action-btn image-action" style="margin:0; padding:12px 18px;" onclick="navigator.clipboard.writeText(document.getElementById('rgbOutput').value)"><i class="fa-solid fa-copy"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="input-wrapper">
+                                <label>HSL Format Code</label>
+                                <div style="display:flex; gap:8px;">
+                                    <input type="text" id="hslOutput" readonly style="flex-grow:1;">
+                                    <button class="action-btn image-action" style="margin:0; padding:12px 18px;" onclick="navigator.clipboard.writeText(document.getElementById('hslOutput').value)"><i class="fa-solid fa-copy"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export palette Button -->
+                <button class="action-btn image-action" id="actionBtn" style="margin-top: 30px;" disabled>
+                    <i class="fa-solid fa-palette"></i> <span>Export Color Palette</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Main JS logic -->
+    <script src="../js/main.js"></script>
+    <!-- Main Engine script -->
+    <script src="../js/color-extractor.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gowtham Tools - Screen & Cam Recorder</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tools.css">
+    <style>
+        /* Pulse red dot animation */
+        .pulsing {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PERSISTENT SIDEBAR -->
+    <aside class="app-sidebar">
+        <a href="../index.html" class="brand-section">
+            <div class="brand-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="brand-name">Gowtham<span>Tools</span></div>
+        </a>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="../index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            </li>
+            
+            <li class="nav-title">Video Tools</li>
+            <li class="nav-item">
+                <a href="video-frame-extractor.html"><i class="fa-solid fa-scissors"></i> Frame Extractor</a>
+            </li>
+            <li class="nav-item active">
+                <a href="screen-recorder.html"><i class="fa-solid fa-video"></i> Screen & Cam Recorder</a>
+            </li>
+
+            <li class="nav-title">Image Tools</li>
+            <li class="nav-item image-tool-item">
+                <a href="image-compressor.html"><i class="fa-solid fa-compress"></i> Image Compressor</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-resizer.html"><i class="fa-solid fa-crop-simple"></i> Resizer & Cropper</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-converter.html"><i class="fa-solid fa-shuffle"></i> Bulk Format Converter</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="color-extractor.html"><i class="fa-solid fa-eye-dropper"></i> Color Palette Extractor</a>
+            </li>
+        </ul>
+
+        <div class="nav-footer">
+            <div class="profile-card">
+                <div class="profile-avatar">GT</div>
+                <div class="profile-info">
+                    <h4>Gowtham Tools</h4>
+                    <p>Client-Side Engine</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <div class="app-container">
+        <!-- HEADER NAVBAR -->
+        <header class="app-header">
+            <div class="header-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search tools..." id="sidebarSearch" disabled>
+            </div>
+            <div class="header-actions">
+                <a href="../index.html" class="action-btn-circle" title="Home Dashboard"><i class="fa-solid fa-house"></i></a>
+                <div class="action-btn-circle" title="System Settings"><i class="fa-solid fa-sliders"></i></div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="app-content">
+            <!-- Back navigation and title -->
+            <a href="../index.html" class="back-nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+            
+            <div class="tool-header-info">
+                <span class="tool-category-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--clr-success); border-color: rgba(16, 185, 129, 0.2);">Media Recording</span>
+                <h1 class="tool-title">Screen & Camera Recorder</h1>
+            </div>
+
+            <!-- Recorder Console Wrapper -->
+            <div class="dropzone-container record-dropzone" style="cursor: default; padding: 40px 20px;">
+                <!-- Glowing status monitor -->
+                <div style="display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:15px;">
+                    <div id="recordingDot" style="display:none; width:12px; height:12px; border-radius:50%; background-color:#ef4444;" class="pulsing"></div>
+                    <span id="recordTimer" style="font-family:'JetBrains Mono', monospace; font-size: 2.2rem; font-weight:700; color:var(--txt-title); letter-spacing:1px;">00:00</span>
+                </div>
+                <p id="recordState">Ready to record stream session.</p>
+                <span>Select capture parameters and click Start below.</span>
+            </div>
+
+            <!-- Controls Grid -->
+            <div class="controls-grid">
+                <!-- Source Setup -->
+                <div class="control-panel" style="border-color: rgba(16, 185, 129, 0.2);">
+                    <div class="panel-title" style="color:var(--clr-success);"><i class="fa-solid fa-sliders" style="color:var(--clr-success);"></i> Capture Parameters</div>
+                    <div class="timeline-box">
+                        <div class="input-wrapper">
+                            <label>Media Stream Source</label>
+                            <select id="selectSource" style="border-color: rgba(16, 185, 129, 0.2);">
+                                <option value="screen" selected>Capture Desktop Screen Share</option>
+                                <option value="camera">Capture Camera Webfeed</option>
+                            </select>
+                        </div>
+                        <div class="toggle-wrapper" style="margin-top: 15px;">
+                            <span class="toggle-label">Acquire Audio Track</span>
+                            <label class="switch">
+                                <input type="checkbox" id="selectAudio" checked>
+                                <span class="slider-toggle" style="background-color:rgba(16, 185, 129, 0.2);"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Record actions -->
+                <div class="control-panel" style="border-color: rgba(16, 185, 129, 0.2); display:flex; flex-direction:column; justify-content:center; gap:15px;">
+                    <div class="panel-title" style="color:var(--clr-success); margin-bottom: 5px;"><i class="fa-solid fa-circle" style="color:var(--clr-success);"></i> Recorder Directives</div>
+                    <div class="range-inputs" style="grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <button id="btnStart" class="action-btn record-action" style="margin: 0; padding:15px; font-size:0.85rem;"><i class="fa-solid fa-microphone"></i> Start</button>
+                        <button id="btnPause" class="action-btn record-action" style="margin: 0; padding:15px; font-size:0.85rem;" disabled><i class="fa-solid fa-pause"></i> Pause</button>
+                        <button id="btnStop" class="action-btn record-action" style="margin: 0; padding:15px; font-size:0.85rem; background:linear-gradient(135deg, #ef4444, #dc2626); box-shadow:0 10px 20px rgba(239, 68, 68, 0.2);" disabled><i class="fa-solid fa-square"></i> Stop</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <button class="action-btn record-action" id="actionBtn" disabled>
+                <i class="fa-solid fa-video"></i> <span>Awaiting Stream Recording Session</span>
+            </button>
+
+            <!-- Video Player Preview Viewport -->
+            <div class="preview-section" id="previewSection">
+                <div class="preview-title">
+                    <span><i class="fa-solid fa-display"></i> Recorded Media Playback Viewport</span>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; background: rgba(0,0,0,0.2); border:1px solid var(--border-subtle); padding: 30px; border-radius:14px;">
+                    <video id="playbackVideo" style="max-width:100%; max-height:450px; object-fit:contain; border:1px solid var(--border-subtle); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"></video>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Main JS logic -->
+    <script src="../js/main.js"></script>
+    <!-- Main Engine script -->
+    <script src="../js/screen-recorder.js"></script>
+</body>
+</html>

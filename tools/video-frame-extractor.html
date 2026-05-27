@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gowtham Tools - Video Frame Extractor</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tools.css">
+
+    <!-- JS Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body>
+
+    <!-- PERSISTENT SIDEBAR -->
+    <aside class="app-sidebar">
+        <a href="../index.html" class="brand-section">
+            <div class="brand-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="brand-name">Gowtham<span>Tools</span></div>
+        </a>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="../index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            </li>
+
+            <li class="nav-title">Video Tools</li>
+            <li class="nav-item active">
+                <a href="video-frame-extractor.html"><i class="fa-solid fa-scissors"></i> Frame Extractor</a>
+            </li>
+            <li class="nav-item">
+                <a href="screen-recorder.html"><i class="fa-solid fa-video"></i> Screen & Cam Recorder</a>
+            </li>
+
+            <li class="nav-title">Image Tools</li>
+            <li class="nav-item image-tool-item">
+                <a href="image-compressor.html"><i class="fa-solid fa-compress"></i> Image Compressor</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-resizer.html"><i class="fa-solid fa-crop-simple"></i> Resizer & Cropper</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-converter.html"><i class="fa-solid fa-shuffle"></i> Bulk Format Converter</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="color-extractor.html"><i class="fa-solid fa-eye-dropper"></i> Color Palette Extractor</a>
+            </li>
+        </ul>
+
+        <div class="nav-footer">
+            <div class="profile-card">
+                <div class="profile-avatar">GT</div>
+                <div class="profile-info">
+                    <h4>Gowtham Tools</h4>
+                    <p>Client-Side Engine</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <div class="app-container">
+        <!-- HEADER NAVBAR -->
+        <header class="app-header">
+            <div class="header-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search tools..." id="sidebarSearch" disabled>
+            </div>
+            <div class="header-actions">
+                <a href="../index.html" class="action-btn-circle" title="Home Dashboard"><i
+                        class="fa-solid fa-house"></i></a>
+                <div class="action-btn-circle" title="System Settings"><i class="fa-solid fa-sliders"></i></div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="app-content">
+            <!-- Back navigation and title -->
+            <a href="../index.html" class="back-nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+
+            <div class="tool-header-info">
+                <span class="tool-category-badge">Video Pipeline</span>
+                <h1 class="tool-title">Ultra Frame Extractor Pro</h1>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="dropzone-container" id="dropZone">
+                <i class="fa-solid fa-clapperboard"></i>
+                <p>Drag & Drop your video file here or <span>Browse Local Files</span></p>
+                <span>Supports MP4, WebM, OGG, AVI, MOV</span>
+                <input type="file" id="videoInput" class="dropzone-input" accept="video/*">
+            </div>
+
+            <!-- Video Preview Container -->
+            <div class="video-preview-container" id="videoPreviewContainer"
+                style="display: none; margin-bottom: 30px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-subtle); background: var(--bg-inner);">
+                <div
+                    style="padding: 12px 20px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-play" style="color: var(--clr-primary);"></i>
+                    <span style="font-size: 0.85rem; font-weight: 600; color: var(--txt-title);">Source Video
+                        Preview</span>
+                </div>
+                <video id="videoPreview" controls
+                    style="width: 100%; max-height: 450px; display: block; background: #000;"></video>
+            </div>
+
+            <!-- File Specifications and Status -->
+            <div class="status-bar" id="statusBar">
+                <div class="status-left">
+                    <i class="fa-solid fa-file-video"></i>
+                    <span id="targetName">file_stream.mp4</span>
+                </div>
+                <div class="status-right" id="targetSpecs">00:00 / 0.00MB</div>
+            </div>
+
+            <!-- Controls Grid -->
+            <div class="controls-grid">
+                <!-- Timeline Ranges -->
+                <div class="control-panel">
+                    <div class="panel-title"><i class="fa-solid fa-timeline"></i> Timeline Range (Seconds)</div>
+                    <div class="timeline-box">
+                        <div class="range-inputs">
+                            <div class="input-wrapper">
+                                <label>Start Range (s)</label>
+                                <input type="number" id="inputFrom" value="0" min="0" step="0.01">
+                            </div>
+                            <div class="input-wrapper">
+                                <label>End Range (s)</label>
+                                <input type="number" id="inputTo" value="0" min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="sliderFrom" min="0" max="100" value="0" step="0.01">
+                            <input type="range" id="sliderTo" min="0" max="100" value="100" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slicing Parameters -->
+                <div class="control-panel">
+                    <div class="panel-title"><i class="fa-solid fa-gears"></i> Engine Parameters</div>
+                    <div class="range-inputs">
+                        <div class="input-wrapper">
+                            <label>Output Format</label>
+                            <select id="selectFormat">
+                                <option value="image/webp">WebP (Fast / Recommended)</option>
+                                <option value="image/jpeg">JPEG (Compressed Quality)</option>
+                                <option value="image/png">PNG (Lossless Output)</option>
+                            </select>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Target Throttle</label>
+                            <select id="selectFps">
+                                <option value="60" selected>60 FPS (Ultra Smooth)</option>
+                                <option value="30">30 FPS (Standard Video)</option>
+                                <option value="24">24 FPS (Cinematic Style)</option>
+                                <option value="10">10 FPS</option>
+                                <option value="1">1 FPS</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Group -->
+            <div class="action-buttons-group" style="display: flex; gap: 15px; margin-bottom: 30px;">
+                <button class="action-btn" id="actionBtn" disabled style="flex: 1; margin-bottom: 0;">
+                    <i class="fa-solid fa-play" id="btnIcon"></i> <span id="btnText">Initialize Render Engine</span>
+                </button>
+                <button class="action-btn" id="stopBtn"
+                    style="flex: 0 0 140px; margin-bottom: 0; background: linear-gradient(135deg, #ef4444, #b91c1c); display: none;">
+                    <i class="fa-solid fa-stop"></i> <span>Stop</span>
+                </button>
+                <button class="action-btn" id="refreshBtn"
+                    style="flex: 0 0 140px; margin-bottom: 0; background: var(--bg-inner); border: 1px solid var(--border-subtle); color: var(--txt-title); display: none;">
+                    <i class="fa-solid fa-rotate-right"></i> <span>Reset</span>
+                </button>
+            </div>
+
+            <!-- Progress Monitor -->
+            <div class="progress-box" id="progressBox">
+                <div class="progress-meta">
+                    <span id="renderState" style="font-weight:600; color:var(--txt-title);">Slicing Engine
+                        Active...</span>
+                    <span id="renderStats" style="font-family:'JetBrains Mono';">0 / 0 Frames</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <div id="consoleLog" class="console-log">Ready to pipeline.</div>
+            </div>
+
+            <!-- Live Output Sequence -->
+            <div class="preview-section" id="previewSection">
+                <div class="preview-title">
+                    <span><i class="fa-solid fa-images"></i> Generated Output Sequence</span>
+                    <span id="liveCounter"
+                        style="color:var(--clr-primary); font-family:'JetBrains Mono'; font-size:0.85rem;">0 Frames
+                        Streamed</span>
+                </div>
+                <div class="preview-grid" id="previewGrid"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Background Elements -->
+    <video id="hiddenVideo" preload="auto" muted style="display:none;"></video>
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
+
+    <!-- Main JS logic -->
+    <script src="../js/main.js"></script>
+    <!-- Main Engine script -->
+    <script src="../js/frame-extractor.js"></script>
+</body>
+
+</html>

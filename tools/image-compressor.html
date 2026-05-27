@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gowtham Tools - Image Compressor</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tools.css">
+</head>
+<body>
+
+    <!-- PERSISTENT SIDEBAR -->
+    <aside class="app-sidebar">
+        <a href="../index.html" class="brand-section">
+            <div class="brand-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="brand-name">Gowtham<span>Tools</span></div>
+        </a>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="../index.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            </li>
+            
+            <li class="nav-title">Video Tools</li>
+            <li class="nav-item">
+                <a href="video-frame-extractor.html"><i class="fa-solid fa-scissors"></i> Frame Extractor</a>
+            </li>
+            <li class="nav-item">
+                <a href="screen-recorder.html"><i class="fa-solid fa-video"></i> Screen & Cam Recorder</a>
+            </li>
+
+            <li class="nav-title">Image Tools</li>
+            <li class="nav-item active image-tool-item">
+                <a href="image-compressor.html"><i class="fa-solid fa-compress"></i> Image Compressor</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-resizer.html"><i class="fa-solid fa-crop-simple"></i> Resizer & Cropper</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="image-converter.html"><i class="fa-solid fa-shuffle"></i> Bulk Format Converter</a>
+            </li>
+            <li class="nav-item image-tool-item">
+                <a href="color-extractor.html"><i class="fa-solid fa-eye-dropper"></i> Color Palette Extractor</a>
+            </li>
+        </ul>
+
+        <div class="nav-footer">
+            <div class="profile-card">
+                <div class="profile-avatar">GT</div>
+                <div class="profile-info">
+                    <h4>Gowtham Tools</h4>
+                    <p>Client-Side Engine</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <div class="app-container">
+        <!-- HEADER NAVBAR -->
+        <header class="app-header">
+            <div class="header-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search tools..." id="sidebarSearch" disabled>
+            </div>
+            <div class="header-actions">
+                <a href="../index.html" class="action-btn-circle" title="Home Dashboard"><i class="fa-solid fa-house"></i></a>
+                <div class="action-btn-circle" title="System Settings"><i class="fa-solid fa-sliders"></i></div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="app-content">
+            <!-- Back navigation and title -->
+            <a href="../index.html" class="back-nav-btn"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+            
+            <div class="tool-header-info">
+                <span class="tool-category-badge" style="background: rgba(6, 182, 212, 0.1); color: var(--clr-secondary); border-color: rgba(6, 182, 212, 0.2);">Image Pipeline</span>
+                <h1 class="tool-title">Image Compressor</h1>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div class="dropzone-container image-dropzone" id="dropZone">
+                <i class="fa-solid fa-image"></i>
+                <p>Drag & Drop your image here or <span>Browse Local Files</span></p>
+                <span>Supports JPEG, PNG, WebP, GIF, SVG</span>
+                <input type="file" id="imageInput" class="dropzone-input" accept="image/*">
+            </div>
+
+            <!-- File Specifications and Status -->
+            <div class="status-bar" id="statusBar">
+                <div class="status-left image-status">
+                    <i class="fa-solid fa-file-image"></i>
+                    <span id="targetName">file_stream.jpg</span>
+                </div>
+                <div class="status-right" id="targetSpecs">0.00 KB</div>
+            </div>
+
+            <!-- Controls Grid -->
+            <div class="controls-grid">
+                <!-- Compression Setting -->
+                <div class="control-panel image-panel">
+                    <div class="panel-title"><i class="fa-solid fa-sliders"></i> Compression Quality</div>
+                    <div class="timeline-box">
+                        <div class="toggle-wrapper" style="margin-top: 0;">
+                            <span class="toggle-label">Output Quality: <b id="labelQuality" style="color:var(--clr-secondary);">80%</b></span>
+                        </div>
+                        <div class="slider-container" style="margin: 10px 0;">
+                            <input type="range" id="sliderQuality" min="1" max="100" value="80" step="1" style="position:static; pointer-events:auto;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversion Override -->
+                <div class="control-panel image-panel">
+                    <div class="panel-title"><i class="fa-solid fa-file-export"></i> Format Target</div>
+                    <div class="input-wrapper">
+                        <label>Output Mime Format</label>
+                        <select id="selectFormat">
+                            <option value="original" selected>Keep Original Format</option>
+                            <option value="image/webp">Convert to WebP (Modern / Efficient)</option>
+                            <option value="image/jpeg">Convert to JPEG (Lossy Quality)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Action Button -->
+            <button class="action-btn image-action" id="actionBtn" disabled>
+                <i class="fa-solid fa-compress" id="btnIcon"></i> <span id="btnText">Upload Image First</span>
+            </button>
+
+            <!-- Live Output Preview -->
+            <div class="preview-section" id="previewSection">
+                <div class="preview-title">
+                    <span><i class="fa-solid fa-arrows-left-right"></i> Side-by-Side Comparison</span>
+                    <span id="savingsPercent" style="color:var(--clr-success); font-family:'JetBrains Mono'; font-weight:700; font-size:1.1rem;">-0%</span>
+                </div>
+                
+                <!-- Side-by-Side Viewport -->
+                <div class="compare-container">
+                    <!-- Original -->
+                    <div class="compare-card">
+                        <div class="compare-label">
+                            <span>Original</span>
+                            <span class="metric" id="originalSize">0.0 KB</span>
+                        </div>
+                        <div class="compare-viewport">
+                            <img id="originalPreview" alt="Original image preview">
+                        </div>
+                    </div>
+                    <!-- Optimized -->
+                    <div class="compare-card">
+                        <div class="compare-label">
+                            <span>Compressed</span>
+                            <span class="metric" id="compressedSize" style="color:var(--clr-success);">0.0 KB</span>
+                        </div>
+                        <div class="compare-viewport">
+                            <img id="compressedPreview" alt="Optimized image preview">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Main JS logic -->
+    <script src="../js/main.js"></script>
+    <!-- Main Engine script -->
+    <script src="../js/image-compressor.js"></script>
+</body>
+</html>
